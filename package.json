@@ -1,0 +1,26 @@
+{
+  "name": "aradia_bot",
+  "version": "1.0.0",
+  "description": "A simple bot for discord",
+  "main": "aradiabot.js",
+  "dependencies": {
+    "discord.io": "^2.5.3",
+    "dotenv": "^4.0.0",
+    "googleapis": "^23.0.0",
+    "request": "^2.83.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chocosailor/aradiabot.git"
+  },
+  "author": "Camilo Ramirez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chocosailor/aradiabot/issues"
+  },
+  "homepage": "https://github.com/chocosailor/aradiabot#readme"
+}
