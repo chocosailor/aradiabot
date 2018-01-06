@@ -1,0 +1,19 @@
+{
+    "replies":{
+        "ENJOY_THIS"        :   "i h0pe y0u like this 0ne",
+        "THIS_GOOD"         :   "is this g00d",
+        "OK"                :   "0k"
+    },
+    "iddle":{
+        "HELLO"             :   "hell0",
+        "BEEP"              :   "beep",    
+        "BOOP"              :   "b00p",
+        "BEEP_BOOP"         :   "beep b00p 0_0",
+        "EMOTE"             :   "0_0"
+    },
+    "error":{
+        "DONT_UNDERSTAND"   :   "i d0nt understand 0_0",
+        "CANT_DO"           :   "im afraid i cant d0 that ",
+        "NO"                :   "n0"
+    }
+}
