@@ -2,6 +2,8 @@ require('dotenv').config();
 var discord = require('discord.io');
 var google = require('googleapis');
 var request = require('request');
+var fs = require('fs');
+var messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
 
 var bot = new discord.Client({
   token: process.env.DISCORD_TOKEN,
@@ -10,12 +12,21 @@ var bot = new discord.Client({
 
 bot.on('ready', function(event) {
   console.log('Logged in as %s - %s\n', bot.username, bot.id);
-  // console.log(bot.channels);
-  bot.sendMessage({to:364852280618516480,message:"hell0"});  
+  bot.setPresence({game:{name: "y0ur m0m"}});
+  var iddleMessage = function() {
+    bot.sendMessage({to: process.env.DISCORD_GENERAL_CHANNEL_ID, message: randomMessage(messages.iddle) });
+    var rand = Math.round(Math.random() * (300000 - 150000)) + 150000;
+    setTimeout(iddleMessage, rand);
+  }
+  iddleMessage();  
+});
+
+bot.on('disconnect', (msg, code) => {
+  if (code === 0) return console.error(msg);
+  bot.connect();
 });
 
 bot.on("message", function (user, userID, channelID, message, rawEvent){
-  console.log(channelID);
   if (message.substring(0, 3) == "ara"){
     var command = message.substring(4);
 
@@ -27,14 +38,14 @@ bot.on("message", function (user, userID, channelID, message, rawEvent){
         getArticle(channelID);
         break;
       case "can you make me a sandwich?":
-        bot.sendMessage({to: channelID,message: "n0"});           
+        bot.sendMessage({to: channelID,message: messages.error.NO});           
         break;
       case "post feet":
-        bot.sendMessage({to: channelID,message: "0_0 https://i.imgur.com/k5y3LhF.png"});  
+        bot.sendMessage({to: channelID,message: messages.iddle.EMOTE + ' ' + "https://i.imgur.com/k5y3LhF.png"});  
         break;
       break;
       default:
-        bot.sendMessage({to: channelID,message: "i d0nt understand 0_0"});   
+        bot.sendMessage({to: channelID,message: randomMessage(messages.error)});   
         break;
     }
 
@@ -70,14 +81,14 @@ function getVideos(channelID) {
           var item = arr_urls[Math.floor(Math.random()*arr_urls.length)];
           bot.sendMessage({
             to: channelID,
-            message: "i h0pe y0u like this 0ne " + item
+            message: randomMessage(messages.replies) + ' ' + item
           });          
         }else{
-          console.error('No results, searching again.');
+          // console.error('No results, searching again.');
           getVideos();          
         }
       }else{
-        console.error('No results, searching again.');
+        // console.error('No results, searching again.');
         getVideos();
       }
     }
@@ -95,7 +106,7 @@ function getArticle(channelID){
       var url = response.query.pages[Object.keys( response.query.pages)[0]].fullurl;
       bot.sendMessage({
         to: channelID,
-        message: "is this g00d " + url
+        message: randomMessage(messages.replies) + ' ' + url
       });      
     });
   });
@@ -105,4 +116,14 @@ function randomStr( length ) {
   var str = "";
   for ( ; str.length < length; str += Math.random().toString( 36 ).substr( 2 ) );
   return str.substr( 0, length );
+}
+
+function randomMessage(obj){
+  var keys = [];
+  for (var prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+          keys.push(prop);
+      }
+  }  
+  return obj[keys[keys.length * Math.random() << 0]];
 }
