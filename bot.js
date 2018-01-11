@@ -14,8 +14,13 @@ bot.on('ready', function(event) {
   console.log('Logged in as %s - %s\n', bot.username, bot.id);
   bot.setPresence({game:{name: "y0ur m0m"}});
   var iddleMessage = function() {
-    bot.sendMessage({to: process.env.DISCORD_GENERAL_CHANNEL_ID, message: randomMessage(messages.iddle) });
-    var rand = Math.round(Math.random() * (300000 - 150000)) + 150000;
+    var chance = Math.floor(Math.random() * 10) + 1;
+    if(chance & 1){      
+      get8Post(process.env.DISCORD_GENERAL_CHANNEL_ID);
+    }else{
+      bot.sendMessage({to: process.env.DISCORD_GENERAL_CHANNEL_ID, message: randomMessage(messages.iddle)});
+    }
+    var rand = Math.round(Math.random() * (500000 - 250000)) + 250000;
     setTimeout(iddleMessage, rand);
   }
   iddleMessage();  
@@ -30,20 +35,31 @@ bot.on("message", function (user, userID, channelID, message, rawEvent){
   if (message.substring(0, 3) == "ara"){
     var command = message.substring(4);
 
-    switch(command){
-      case "can you send me a video?":
+    switch(command){      
+      case (command.match(/shitpost/) || {}).input: // shitpost
+        get8Post(channelID);
+        break;         
+      case (command.match(/video/) || {}).input: //"can you send me a video?"
         getVideos(channelID);        
         break;
-      case "can you give me something to read?":
+      case (command.match(/read/) || {}).input: //"can you give me something to read?":
         getArticle(channelID);
         break;
+      case (command.match(/^say/) || {}).input: // say
+        bot.sendMessage({to: channelID,message: aradiaTextConvert(command,true)});
+        break;
+      case (command.match(/what do you think/) || {}).input: // magic ball
+        bot.sendMessage({to: channelID,message: randomMessage(messages.magic_ball)});
+        break;        
       case "can you make me a sandwich?":
         bot.sendMessage({to: channelID,message: messages.error.NO});           
         break;
       case "post feet":
         bot.sendMessage({to: channelID,message: messages.iddle.EMOTE + ' ' + "https://i.imgur.com/k5y3LhF.png"});  
         break;
-      break;
+      case "help":
+        bot.sendMessage({to: channelID,message: messages.help});  
+        break;
       default:
         bot.sendMessage({to: channelID,message: randomMessage(messages.error)});   
         break;
@@ -112,6 +128,33 @@ function getArticle(channelID){
   });
 }
 
+function get8Post(channelID){
+  request("https://8ch.net/homosuck/threads.json", function (error,responce,body) {
+    var byPage = JSON.parse(body).slice(0);
+    byPage.sort(function(a,b) {
+      return a.page - b.page;
+    });
+    var page = byPage[Math.floor(Math.random()*byPage.length)];
+    var thread = page.threads[Math.floor(Math.random()*page.threads.length)];
+    var thread_url = "https://8ch.net/homosuck/res/"+thread.no+".json";
+    request(thread_url, function (error,responce,thread_body) {
+      if(error == null && !thread_body.includes("answer_404")){
+        var thread_content = JSON.parse(thread_body);
+        var post = thread_content.posts[Math.floor(Math.random()*thread_content.posts.length)];
+        if((post.com.match(/&gt;&gt;/) || {}).input){
+          get8Post(channelID);
+        }else{
+          var stripped = post.com.replace(/<(?:br|\/div|\/p)>/g, "\n").replace(/<.*?>/g, "");
+          // var stripped = post.com.replace(/(<([^>]+)>)/ig,"");
+          bot.sendMessage({to: channelID,message: aradiaTextConvert(stripped,false)});
+        }
+      }else{
+        get8Post(channelID);
+      }
+    });
+  });
+}
+
 function randomStr( length ) {    
   var str = "";
   for ( ; str.length < length; str += Math.random().toString( 36 ).substr( 2 ) );
@@ -126,4 +169,14 @@ function randomMessage(obj){
       }
   }  
   return obj[keys[keys.length * Math.random() << 0]];
+}
+
+function aradiaTextConvert(text,say){
+  var new_text = text.toLowerCase();
+  if(say){
+    new_text = new_text.replace("say","").replace(/o/g, "0").replace(/[^\w\s]/gi, '');
+  }else{
+    new_text = new_text.replace(/o/g, "0").replace(/[^\w\s*>:/.&,?()%$#]/gi, '');
+  }
+  return new_text;
 }

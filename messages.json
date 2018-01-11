@@ -9,11 +9,35 @@
         "BEEP"              :   "beep",    
         "BOOP"              :   "b00p",
         "BEEP_BOOP"         :   "beep b00p 0_0",
-        "EMOTE"             :   "0_0"
+        "EMOTE"             :   "0_0",
+        "RIBBIT"            :   "ribbit"
     },
     "error":{
         "DONT_UNDERSTAND"   :   "i d0nt understand 0_0",
         "CANT_DO"           :   "im afraid i cant d0 that ",
         "NO"                :   "n0"
-    }
+    },
+    "magic_ball":{
+        "CERTAIN"           :   "it is certain",
+        "DECIDEDLY"         :   "it is decidedly s0",
+        "NO_DOUBT"          :   "with0ut a d0ubt",
+        "YES_DEF"           :   "yes definitely",
+        "RELY"              :   "you may rely 0n it",
+        "SEE_IT"            :   "as i see it yes",
+        "MOST_LIKELY"       :   "m0st likely",
+        "OUTLOOK_GOOG"      :   "0utl00k g00d",
+        "YES"               :   "yes",
+        "POINTS_TO"         :   "signs p0int t0 yes",
+        "HAZY"              :   "reply hazy try again",
+        "LATER"             :   "ask again later",
+        "NOT_NOW"           :   "better n0t tell y0u n0w",
+        "CANNOT_PRED"       :   "cann0t predict n0w",
+        "ASK_AGAIN"         :   "c0ncentrate and ask again",
+        "DONT_COUNT"        :   "d0n't c0unt on it",
+        "REPLY_NO"          :   "my reply is n0",
+        "SOURCES_NO"        :   "my s0urces say n0",
+        "OUTLOOK_NO"        :   "0utl00k not s0 g00d",
+        "DOUBTFUL"          :   "very d0ubtful"
+    },
+    "help"                  :   "```fix\nAradiabot Commands List\n```\nAll commands need to start with 'ara ' for the bot to pick them up, the command can be anywhere in the message (if it doesnt explicitely says so), for example: `ara can you shitpost something`\n\n**shitpost - ** gives a random shitpost from HSG board\n**video - ** gives a random video with low views from youtube\n**read - ** gives a random article from wikipedia\n**say - ** Must used as 'ara say TEXT', makes the bot say the text sent\n**what do you think - ** Must be used as 'ara what do you think', gives a magic ball reply\n"
 }
